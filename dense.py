@@ -61,7 +61,7 @@ def floyd_warshall_numpy(G, nodelist=None, weight='weight'):
     return A
 
 
-def floyd_warshall_predecessor_and_distance(G, weight='weight'):
+def floyd_warshall_predecessor_and_distance(G, weight='weight', do_csv=False, do_json=False, do_print=False):
     """Find all-pairs shortest path lengths using Floyd's algorithm.
 
     Parameters
@@ -152,16 +152,12 @@ def floyd_warshall_predecessor_and_distance(G, weight='weight'):
         print('-'*30)
         # END _ my logic
     
-    import_obj_to_csv(result)
+    import_obj_to_csv(result, do_csv, do_json, do_print)
 
     return dict(pred), dict(dist)
 
-def import_obj_to_csv(objectFile):
+def import_obj_to_csv(objectFile, do_csv=False, do_json=False, do_print=False):
     
-    do_print = False
-    do_json = False
-    do_csv = True
-
     #              1
     # ======== print pretty way ========
     if do_print:
@@ -199,7 +195,7 @@ def import_obj_to_csv(objectFile):
             # writer.writerow(['yourText']), instead of writer.writerow('yourText')
             # coz that's more pretty :)
             for item in objectFile:
-                writer.writerow( 'iteration #' + str(item['iterName']))
+                writer.writerow( ['iteration #' + str(item['iterName'])])
                 writer.writerow([' '])
 
                 writer.writerow(['PREV TABLE'])
@@ -210,11 +206,11 @@ def import_obj_to_csv(objectFile):
                 writer.writerows(item['distTable'])
                 writer.writerow([' '])
                 
-                writer.writerow('=============')
+                writer.writerow(['================================================'])
     
     
 
-def floyd_warshall(G, weight='weight'):
+def floyd_warshall(G, weight='weight', do_csv=False, do_json=False, do_print=False):
     """Find all-pairs shortest path lengths using Floyd's algorithm.
 
     Parameters
@@ -246,7 +242,7 @@ def floyd_warshall(G, weight='weight'):
     all_pairs_shortest_path_length
     """
     # could make this its own function to reduce memory costs
-    return floyd_warshall_predecessor_and_distance(G, weight=weight)[1]
+    return floyd_warshall_predecessor_and_distance(G, weight=weight, do_csv=do_csv, do_json=do_json, do_print=do_print)[1]
 
 # fixture for nose tests
 

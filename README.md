@@ -1,5 +1,3 @@
-# floyd_warshall_details
-floyd_warshall from networkX with details
 # Алгоритм floyd_warshall на графах
 ## ЗАЧЕМ?
 ##### Прост)

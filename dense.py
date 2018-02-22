@@ -9,6 +9,7 @@
 #    BSD license.
 
 import networkx as nx
+
 __author__ = """Aric Hagberg <aric.hagberg@gmail.com>"""
 __all__ = ['floyd_warshall',
            'floyd_warshall_predecessor_and_distance',
@@ -123,48 +124,41 @@ def floyd_warshall_predecessor_and_distance(G, weight='weight', do_csv=False, do
         # my logic
         pred_tablee = []
         for k, v in pred.items():
-            all_cells = [0 for i in range(vertexes_len)]
-            
+            all_cells = [0]*vertexes_len
             for kk, vv in v.items():
-                all_cells[kk] = vv
+                all_cells[kk-1] = vv
 
             pred_tablee.append(all_cells)
-        
+
         dist_tablee = []
         for k, v in dist.items():
-            all_cells = [0 for i in range(vertexes_len)]
-            
+            all_cells = [0]*vertexes_len
             for kk, vv in v.items():
-                all_cells[kk] = vv
+                all_cells[kk-1] = vv
 
             dist_tablee.append(all_cells)
-        
-        # print(tablee)
-        # import_obj_to_csv(dist_tablee, pred_tablee, iterationNum)
+
         result.append(
             {
-                'iterName' : iterationNum,
-                'prevTable' : pred_tablee,
-                'distTable' : dist_tablee
+                'iterName': iterationNum,
+                'prevTable': pred_tablee,
+                'distTable': dist_tablee
             }
         )
-        iterationNum+=1
-        print('-'*30)
+        iterationNum += 1
         # END _ my logic
-    
-    import_obj_to_csv(result, do_csv, do_json, do_print)
+
+    export_to_csv(result, do_csv, do_json, do_print)
 
     return dict(pred), dict(dist)
 
-def import_obj_to_csv(objectFile, do_csv=False, do_json=False, do_print=False):
-    
+
+def export_to_csv(objectFile, do_csv=False, do_json=False, do_print=False):
     #              1
     # ======== print pretty way ========
     if do_print:
         import pprint
         pprint.pprint(objectFile)
-
-
 
     #              2
     # ======== make .json ========
@@ -172,8 +166,6 @@ def import_obj_to_csv(objectFile, do_csv=False, do_json=False, do_print=False):
         import json
         with open('result_tables.json', 'w+') as outfile:
             json.dump(objectFile, outfile)
-    
-
 
     # ======== make .csv ========
     if do_csv:
@@ -185,7 +177,7 @@ def import_obj_to_csv(objectFile, do_csv=False, do_json=False, do_print=False):
 
         with open(filename, 'w+', newline='') as file:
 
-            # let's choose 
+            # let's choose
             #       delimiter='\t'
             # and   dialect='excel'
             writer = csv.writer(file, delimiter='\t', dialect='excel')
@@ -195,7 +187,7 @@ def import_obj_to_csv(objectFile, do_csv=False, do_json=False, do_print=False):
             # writer.writerow(['yourText']), instead of writer.writerow('yourText')
             # coz that's more pretty :)
             for item in objectFile:
-                writer.writerow( ['iteration #' + str(item['iterName'])])
+                writer.writerow(['iteration #' + str(item['iterName'])])
                 writer.writerow([' '])
 
                 writer.writerow(['PREV TABLE'])
@@ -205,10 +197,9 @@ def import_obj_to_csv(objectFile, do_csv=False, do_json=False, do_print=False):
                 writer.writerow(['DIST TABLE'])
                 writer.writerows(item['distTable'])
                 writer.writerow([' '])
-                
+
                 writer.writerow(['================================================'])
-    
-    
+
 
 def floyd_warshall(G, weight='weight', do_csv=False, do_json=False, do_print=False):
     """Find all-pairs shortest path lengths using Floyd's algorithm.
@@ -242,7 +233,9 @@ def floyd_warshall(G, weight='weight', do_csv=False, do_json=False, do_print=Fal
     all_pairs_shortest_path_length
     """
     # could make this its own function to reduce memory costs
-    return floyd_warshall_predecessor_and_distance(G, weight=weight, do_csv=do_csv, do_json=do_json, do_print=do_print)[1]
+    return floyd_warshall_predecessor_and_distance(G, weight=weight, do_csv=do_csv, do_json=do_json, do_print=do_print)[
+        1]
+
 
 # fixture for nose tests
 
